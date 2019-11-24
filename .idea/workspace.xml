@@ -6,6 +6,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/frontend/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/frontend/src/components/LogIn.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/frontend/src/components/LogIn.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/frontend/src/components/Profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/frontend/src/components/Profile.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/frontend/src/components/Route.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/frontend/src/components/Route.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/frontend/src/components/Show.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/frontend/src/components/Show.js" afterDir="false" />

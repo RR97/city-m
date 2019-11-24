@@ -2,18 +2,18 @@ import { withRouter } from 'react-router-dom'
 import React, { Component } from 'react'
 
 class LogIn extends Component {
-
-    constuctor() {
-        this.routeChange = this.routeChange.bind(this);
-    }
+    state = {
+      username: null,
+      password: null,
+    };
 
     routeChange() {
         let path = '/main';
         this.props.history.push(path);
     }
     logIn = () => {
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
+        const username = this.refs.username.value;
+        const password = this.refs.password.value;
         if (username === 'admin' && password === '1234') {
             this.routeChange();
         }
