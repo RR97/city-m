@@ -1,35 +1,42 @@
 import React, { Component } from 'react'
-import QrReader from "react-qr-reader";
+const Instascan = require('instascan');
 
 class Show extends Component {
     state = {
         result: 'No result'
     };
 
-    handleScan = data => {
-        if (data) {
-            this.setState({
-                result: '<iframe src="' + data + '" width="540" height="450"></iframe>'
-            })
-        }
-    };
+    componentDidMount() {
+        let scanner = new Instascan.Scanner({ video: this.refs.camera, scanPeriod: 5 });
+        console.log(this.refs.camera);
+        scanner.addListener('scan', function (content) {
+            if (content) {
+                this.setState({
+                    result: '<iframe src="' + content + '" width="540" height="450"></iframe>'
+                })
+            }
+        });
 
-    handleError = err => {
-        console.error(err)
-    };
+        Instascan.Camera.getCameras().then(function (cameras) {
+            if (cameras.length > 0) {
+                scanner.start(cameras[0]);
+            } else {
+                console.error('No cameras found.');
+            }
+        }).catch(function (e) {
+            console.error(e);
+        });
+
+        this.setState({ scanner });
+    }
 
     render() {
         const { res } = this.state.result;
         return (
             <div>
-                <QrReader
-                    delay={300}
-                    onError={this.handleError}
-                    onScan={this.handleScan}
-                    style={{ width: '100%' }}
-                    facingMode='environment'
-                />
-                <div dangerouslySetInnerHTML={{ __html: res }} />
+                <video id="camera" ref="camera" style={{ transform: 'scaleX(-1)', width: '300px',
+                    height: '300px', outline: '1px solid red' }} autoPlay />
+                {res && <div dangerouslySetInnerHTML={{ __html: res }} />}
             </div>
         )
     }
