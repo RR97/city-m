@@ -2,14 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="865f03f4-6cb9-4afb-850a-ad5245a96959" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/frontend/src/components/Main.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/frontend/src/components/Profile.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/frontend/src/maxi.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/frontend/src/components/Prizes.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/frontend/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/frontend/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/frontend/src/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/frontend/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/frontend/src/components/Profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/frontend/src/components/Profile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/frontend/src/components/Route.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/frontend/src/components/Route.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/frontend/src/components/Show.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/frontend/src/components/Show.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/frontend/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/frontend/src/index.js" afterDir="false" />
     </list>

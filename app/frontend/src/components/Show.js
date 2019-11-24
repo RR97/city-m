@@ -33,7 +33,7 @@ class Show extends Component {
     render() {
         const { res } = this.state.result;
         return (
-            <div>
+            <div style={{ textAlign: 'center'}}>
                 <video id="camera" ref="camera" style={{ transform: 'scaleX(-1)', width: '300px',
                     height: '300px', outline: '1px solid red' }} autoPlay />
                 {res && <div dangerouslySetInnerHTML={{ __html: res }} />}

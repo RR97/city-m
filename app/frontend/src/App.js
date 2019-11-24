@@ -1,7 +1,7 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom'
 import logo from './logo.png';
 import './App.css';
+import LogIn from './components/LogIn'
 
 function App() {
 
@@ -9,12 +9,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p style={{ marginTop: -120 }}>
-          <div style={{ paddingBottom: 10 }}>Username: <input type="text" name="uname"/></div>
-          <div>Password: <input type="password" name="password"/></div>
-        </p>
-
-        <NavLink to="/main"><button style={{ paddingBottom: 10 }}>Log In</button></NavLink>
+        <LogIn />
         <a
           className="App-link"
           href="/create"
