@@ -36,6 +36,7 @@ class Show extends Component {
             <div style={{ textAlign: 'center'}}>
                 <video id="camera" ref="camera" style={{ transform: 'scaleX(-1)', width: '300px',
                     height: '300px', outline: '1px solid red' }} autoPlay />
+                <p>Scan QR Code</p>
                 {res && <div dangerouslySetInnerHTML={{ __html: res }} />}
             </div>
         )
