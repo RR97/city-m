@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/hackatum.iml" filepath="$PROJECT_DIR$/.idea/hackatum.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pretzlhunt.iml" filepath="$PROJECT_DIR$/pretzlhunt.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android/pretzlhunt_android.iml" filepath="$PROJECT_DIR$/android/pretzlhunt_android.iml" />
     </modules>
   </component>
 </project>
