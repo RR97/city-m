@@ -35,18 +35,16 @@ class NavDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.map),
-            title: Text('My Locations'),
+            title: Text('My Locations (soon available)'),
+            enabled: false,
             onTap: () {
               Navigator.pushNamed(context, '/myMap');
             },
           ),
           ListTile(
-            leading: Icon(Icons.panorama),
-            title: Text('Gallery'),
-          ),
-          ListTile(
             leading: Icon(Icons.settings),
-            title: Text('Settings'),
+            title: Text('Settings (available on existing account)'),
+            enabled: false,
             onTap: () {
               Navigator.pushNamed(context, '/');
             },
