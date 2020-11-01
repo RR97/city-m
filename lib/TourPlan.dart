@@ -18,7 +18,7 @@ class _TourPlanState extends State<TourPlan> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text('Plan a tour')),
-        drawer: NavDrawer(),
+        // drawer: NavDrawer(),
         body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

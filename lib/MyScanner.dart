@@ -10,7 +10,7 @@ class MyScanner extends StatelessWidget {
       appBar: AppBar(
         title: Text("Location Scanner"),
       ),
-      drawer: NavDrawer(),
+      // drawer: NavDrawer(),
       body: Center(
         child: ScanLocationQR(),
       ),

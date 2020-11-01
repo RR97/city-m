@@ -2,6 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NavDrawer extends StatelessWidget {
+  final String name;
+
+  NavDrawer({Key key, this.name}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -12,12 +16,21 @@ class NavDrawer extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.deepPurple,
             ),
-            accountName: new Text('Max Pretzelman'),
+            accountName: new Padding(
+              padding: EdgeInsets.fromLTRB(5, 0, 25, 0),
+              child: new Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  new Text(name),
+                  new Text('Points: 0')
+                ],
+              ),
+            ),
             currentAccountPicture: new Image.asset(
               'assets/images/LoeweMax.png',
               width: 128,
               height: 128,
-            ), accountEmail: Text('musterEmail@test.de'),
+            ), // accountEmail: Text('musterEmail@test.de'),
           ),
           ListTile(
             leading: Icon(Icons.loupe),
