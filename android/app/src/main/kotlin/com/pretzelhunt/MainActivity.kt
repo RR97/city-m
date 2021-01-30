@@ -1,4 +1,4 @@
-package com.example.pretzlhunt
+package com.pretzelhunt
 
 import io.flutter.embedding.android.FlutterActivity
 

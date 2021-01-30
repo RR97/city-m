@@ -1,16 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pretzlhunt/navDrawer.dart';
-import 'package:pretzlhunt/scanLocationQR.dart';
+import 'package:pretzelhunt/scanLocationQR.dart';
 
-class MyScanner extends StatelessWidget {
+class LocationScanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Location Scanner"),
+        automaticallyImplyLeading: false,
       ),
-      // drawer: NavDrawer(),
       body: Center(
         child: ScanLocationQR(),
       ),

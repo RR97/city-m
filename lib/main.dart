@@ -1,233 +1,288 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pretzlhunt/localStorage/writeToReadFromLocalStorage.dart';
-import 'package:pretzlhunt/MyScanner.dart';
-import 'package:pretzlhunt/navDrawer.dart';
-import 'package:pretzlhunt/MyMap.dart';
-import 'package:pretzlhunt/TourPlan.dart';
+import 'package:pretzelhunt/localStorage/writeToReadFromLocalStorage.dart';
+import 'package:pretzelhunt/LocationScanner.dart';
+import 'package:pretzelhunt/MyMap.dart';
+import 'package:pretzelhunt/TourPlan.dart';
+import 'tour.dart';
+import 'navigationRoutes.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Pretzel Hunt',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.deepPurple,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => MyHomePage(title: 'Pretzel Hunt'),
-        '/scan': (context) => MyScanner(),
-        '/plan': (context) => TourPlan(),
-        '/myMap': (context) => MyMap()
+    return FutureBuilder(
+      // Initialize FlutterFire:
+      future: _initialization,
+      builder: (context, snapshot) {
+        // Check for errors
+        if (snapshot.hasError) {
+          // return SomethingWentWrong();
+        }
+
+        // Once complete, show your application
+        if (snapshot.connectionState == ConnectionState.done) {
+          return StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance.collection('tours').snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+
+              if (snapshot.hasError) {
+                return Text("Something went wrong");
+              }
+
+              if (snapshot.hasData) {
+                List<Tour> tours = snapshot.data.docs.map(
+                        (doc) => new Tour(doc['name'], doc['info'], doc['destinations'], doc['transportTypes'])).toList();
+
+                return MaterialApp(
+                  title: 'Pretzel Hunt',
+                  theme: ThemeData(
+                    primarySwatch: Colors.blue,
+                    visualDensity: VisualDensity.adaptivePlatformDensity,
+                  ),
+                  initialRoute: '/',
+                  routes: {
+                    '/': (context) => MyHomePage(title: 'Pretzel Hunt', tours: tours),
+                    '/scan': (context) => LocationScanner(),
+                    '/plan': (context) => TourPlan(tours),
+                    '/myMap': (context) => MyMap()
+                  },
+                );
+              }
+
+              return new Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: new Text('Loading'));
+            },
+          );
+        }
+
+        // Otherwise, show something whilst waiting for initialization to complete
+        return Container(width: 0.0, height: 0.0);
       },
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+  MyHomePage({Key key, this.title, this.tours}) : super(key: key);
 
   final String title;
+  final List<Tour> tours;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+GlobalKey<NavigatorState> _pageNavigatorKey = GlobalKey<NavigatorState>();
+
 class _MyHomePageState extends State<MyHomePage> {
+  Future<String> userData;
+  Map<String, dynamic> data;
   TextEditingController nameController = TextEditingController();
-  Map<String,dynamic> data;
+  int _selectedIndex = 0;
 
   void saveName(String name) {
-    setState(() {
-      data['name'] = name;
-    });
-    writeContent(jsonEncode(data));
+    writeContent(jsonEncode({ 'name': name }));
   }
 
   void uploadProfilePicture() {
-    setState(() {
-
-    });
   }
 
   @override
   void initState() {
     super.initState();
-    readContent().then((String value) {
-      setState(() {
-        data = jsonDecode(value);
-      });
-    });
+    userData = readContent();
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    if(data != null && data.isNotEmpty) {
-      return Scaffold(
-        appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: Text(widget.title),
-        ),
-        drawer: NavDrawer(name: data['name']),
-        body: Padding(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            // Column is also a layout widget. It takes a list of children and
-            // arranges them vertically. By default, it sizes itself to fit its
-            // children horizontally, and tries to be as tall as its parent.
-            //
-            // Invoke "debug painting" (press "p" in the console, choose the
-            // "Toggle Debug Paint" action from the Flutter Inspector in Android
-            // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-            // to see the wireframe for each widget.
-            //
-            // Column has various properties to control how it sizes itself and
-            // how it positions its children. Here we use mainAxisAlignment to
-            // center the children vertically; the main axis here is the vertical
-            // axis because Columns are vertical (the cross axis would be
-            // horizontal).
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              FittedBox(
-                fit: BoxFit.fitWidth,
-                child: Row(
-                  children: [
-                    Image.asset(
-                      'assets/images/LoeweMax.png',
-                      width: 175,
-                      height: 175,
+    return FutureBuilder(
+      future: userData,
+      builder: (context, result) {
+        if (result.hasData) {
+          data = jsonDecode(result.data);
+          if(data != null && data.isNotEmpty) {
+            return Scaffold(
+              body: Navigator(
+                key: _pageNavigatorKey,
+                onGenerateRoute: (RouteSettings settings) {
+                  WidgetBuilder builder;
+                  switch (settings.name) {
+                    case '/':
+                      builder = (BuildContext context) => Home(data);
+                      break;
+                    case '/scan':
+                      builder = (BuildContext context) => LocationScanner();
+                      break;
+                    case '/plan':
+                      builder = (BuildContext context) => TourPlan(widget.tours);
+                      break;
+                  }
+                  return MaterialPageRoute(
+                      builder: builder,
+                      settings: settings
+                  );
+                },
+              ),
+              bottomNavigationBar: BottomNavigationBar(
+                items: [
+                  for (final route in navigationRoutes)
+                    BottomNavigationBarItem(
+                      label: route.name,
+                      icon: route.icon,
+                    )
+                ],
+                currentIndex: _selectedIndex,
+                selectedItemColor: Colors.blue,
+                onTap: (index) {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                  _pageNavigatorKey.currentState.pushNamed(navigationRoutes.elementAt(index).path);
+                },
+              ),
+            );
+          } else {
+            return Scaffold(
+              body: Padding(
+                padding: EdgeInsets.fromLTRB(60, 160, 60, 0),
+                child: ListView(
+                  children: <Widget>[
+                    Container(
+                      alignment: Alignment.center,
+                      child: Text('What is your name?'),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 25),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            data['name'],
-                            style: TextStyle(
-                              fontSize: 29,
-                              fontFamily: 'Calibri',
-                            ),
-                          ),
-                          Text(
-                            '\nPoints earned: ' + (data['points'] ?? 0).toString(),
-                            style: TextStyle(
-                              fontSize: 19,
-                              fontFamily: 'Calibri',
-                            ),
-                          ),
-                          Text(
-                            'Locations visited: ' + (data['locations']?.length ?? 0).toString(),
-                            style: TextStyle(
-                              fontSize: 19,
-                              fontFamily: 'Calibri',
-                            ),
-                          ),
-                          Text(
-                            'Routes traveled: ' + (data['routes']?.length ?? 0).toString(),
-                            style: TextStyle(
-                              fontSize: 19,
-                              fontFamily: 'Calibri',
-                            ),
-                          )
-                        ],
+                    Container(
+                      alignment: Alignment.center,
+                      child: TextField(
+                        controller: nameController,
                       ),
                     ),
+                    Container(
+                      child: RaisedButton(
+                        textColor: Colors.white,
+                        color: Colors.blue,
+                        child: Text('Save'),
+                        onPressed: () {
+                          saveName(nameController.text);
+                        },
+                      ),
+                    )
                   ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  RaisedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/scan');
-                    },
-                    color: Colors.deepPurple,
-                    textColor: Colors.white,
-                    padding: EdgeInsets.all(5),
-                    child: Text('Scan Location'),
+            );
+          }
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      }
+    );
+  }
+}
+
+class Home extends StatelessWidget {
+  final Map<String,dynamic> data;
+
+  Home(this.data);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Pretzel Hunt'),
+        automaticallyImplyLeading: false,
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            FittedBox(
+              fit: BoxFit.fitWidth,
+              child: Row(
+                children: [
+                  Image.asset(
+                    'assets/images/LoeweMax.png',
+                    width: 175,
+                    height: 175,
                   ),
-                  RaisedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/plan');
-                      },
-                    color: Colors.deepPurple,
-                    textColor: Colors.white,
-                    padding: EdgeInsets.all(5),
-                    child: Text('Start a route'),
-                  )
+                  Padding(
+                    padding: EdgeInsets.only(left: 25),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          data['name'],
+                          style: TextStyle(
+                            fontSize: 29,
+                            fontFamily: 'Calibri',
+                          ),
+                        ),
+                        Text(
+                          '\nPoints earned: ' + (data['points'] ?? 0).toString(),
+                          style: TextStyle(
+                            fontSize: 19,
+                            fontFamily: 'Calibri',
+                          ),
+                        ),
+                        Text(
+                          'Locations visited: ' + (data['locations']?.length ?? 0).toString(),
+                          style: TextStyle(
+                            fontSize: 19,
+                            fontFamily: 'Calibri',
+                          ),
+                        ),
+                        Text(
+                          'Routes traveled: ' + (data['routes']?.length ?? 0).toString(),
+                          style: TextStyle(
+                            fontSize: 19,
+                            fontFamily: 'Calibri',
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ],
-              )
-            ],
-          ),
-        ),
-      );
-    } else {
-      return Scaffold(
-        body: Padding(
-          padding: EdgeInsets.fromLTRB(60, 160, 60, 0),
-          child: ListView(
-            children: <Widget>[
-              Container(
-                alignment: Alignment.center,
-                child: Text('What is your name?'),
               ),
-              Container(
-                alignment: Alignment.center,
-                child: TextField(
-                  controller: nameController,
-                ),
-              ),
-              Container(
-                child: RaisedButton(
-                  textColor: Colors.white,
-                  color: Colors.deepPurple,
-                  child: Text('Save'),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                RaisedButton(
                   onPressed: () {
-                    saveName(nameController.text);
+                    Navigator.pushNamed(context, '/scan');
                   },
+                  color: Colors.blue,
+                  textColor: Colors.white,
+                  padding: EdgeInsets.all(5),
+                  child: Text('Scan Location'),
                 ),
-              )
-            ],
-          ),
+                RaisedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/plan');
+                  },
+                  color: Colors.blue,
+                  textColor: Colors.white,
+                  padding: EdgeInsets.all(5),
+                  child: Text('Start a route'),
+                )
+              ],
+            )
+          ],
         ),
-      );
-    }
+      ),
+    );
   }
 }
