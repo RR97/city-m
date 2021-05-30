@@ -1,24 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pretzlhunt/navDrawer.dart';
-import 'tours.dart';
+import '../tour.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
 class TourPlan extends StatefulWidget {
+  final List<Tour> tours;
+
+  TourPlan(this.tours);
+
   @override
   _TourPlanState createState() => _TourPlanState();
 }
 
 class _TourPlanState extends State<TourPlan> {
-  List<Tour> tours = Tours.getToursList();
   Tour chosenTour;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Plan a tour')),
-        drawer: NavDrawer(),
+        appBar: AppBar(
+          title: Text('Plan a tour'),
+          automaticallyImplyLeading: false,
+        ),
+        // drawer: NavDrawer(),
         body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -30,12 +35,11 @@ class _TourPlanState extends State<TourPlan> {
                       chosenTour = newVal;
                     });
                   },
-                  items: tours.map<DropdownMenuItem<Tour>>((Tour value) {
-                    return DropdownMenuItem<Tour>(
-                      value: value,
-                      child: Text(value.name),
-                    );
-                  }).toList(),
+                  items: widget.tours.map<DropdownMenuItem<Tour>>((Tour tour) =>
+                      DropdownMenuItem<Tour>(
+                        value: tour,
+                        child: Text(tour.name),
+                      )).toList(),
                 ),
                 RaisedButton(
                   child: Text(
@@ -113,7 +117,7 @@ class _PlanTransportState extends State<PlanTransport> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       new Radio(
-                        value: widget.tour.transportTypes[index],
+                        value: widget.tour.transportTypes[index].toString(),
                         groupValue: chosenTransportType,
                         onChanged: _chooseTransport,
                       ),

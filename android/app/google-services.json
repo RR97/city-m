@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "487237325211",
+    "project_id": "pretzel-hunt",
+    "storage_bucket": "pretzel-hunt.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487237325211:android:65df32cf5f3cbc773bd13e",
+        "android_client_info": {
+          "package_name": "com.pretzelhunt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "487237325211-u1qsn559fbsnhkoksdn0aeascmu2rg77.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJWFItIcMpe1z5WdE6pyxvtneVH_tuS9U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "487237325211-u1qsn559fbsnhkoksdn0aeascmu2rg77.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
