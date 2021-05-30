@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pretzelhunt/scanLocationQR.dart';
+import 'package:pretzelhunt/ScanLocationQR.dart';
 
 class LocationScanner extends StatelessWidget {
   @override
