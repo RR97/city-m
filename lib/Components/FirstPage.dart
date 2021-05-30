@@ -5,7 +5,7 @@ import 'package:pretzelhunt/localStorage/writeToReadFromLocalStorage.dart';
 import '../navigationRoutes.dart';
 import 'package:pretzelhunt/tour.dart';
 import 'Home.dart';
-// import 'TourPlan.dart';
+import 'TourPlan.dart';
 import 'LocationScanner.dart';
 
 
@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         builder = (BuildContext context) => LocationScanner();
                         break;
                       case '/plan':
-                        // builder = (BuildContext context) => TourPlan(widget.tours);
+                        builder = (BuildContext context) => TourPlan(widget.tours);
                         break;
                     }
                     return MaterialPageRoute(
